@@ -107,5 +107,7 @@ void DefaultSignalHandler() {
   printf("Closed server_fd\n");
 }
 
-void SetUpSignalHandler() { signal(SIGINT, DefaultSignalHandler); }
+void SetUpSignalHandler() {
+  // signal(SIGINT, DefaultSignalHandler);
+}
 #endif
