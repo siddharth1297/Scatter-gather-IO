@@ -28,38 +28,39 @@ typedef struct msg_t {
   char **mem_ = nullptr;
   size_t len_ = 0;
 
-  msg_t(size_t len): len_(len) {}
+  msg_t(size_t len) : len_(len) {}
   ~msg_t() {
-	  for(size_t i=0; i<len_; i++)
-		  free(mem_[i]);
+    for (size_t i = 0; i < len_; i++)
+      free(mem_[i]);
   }
 
   void FillRandomeData() {
-	  for(size_t i=0; i<len_; i++) {
-	    mem_[i] = Helper::Allocator::alloc<char>(sizes_[i]);
-    		Helper::Random::FillRandomReadableASCII(mem_[i], sizes_[i]);
-	  }
+    for (size_t i = 0; i < len_; i++) {
+      mem_[i] = Helper::Allocator::alloc<char>(sizes_[i]);
+      Helper::Random::FillRandomReadableASCII(mem_[i], sizes_[i]);
+    }
   }
   void SerializeAndWrite(int fd) {
-	  /*
-    size_t offset = 0;
-    size_t bytes = 0;
-    char *buf = nullptr;
-    Helper::time_unit_t complete_serialization_time;
-    {
-      Helper::Timer<Helper::microsecond_t> _(complete_serialization_time);
-      // Allocate buffer
-      buf = Helper::Allocator::alloc<char>();
-      // serialize
-      memcpy(buf + offset, mem_1, size_1);
-      offset += size_1;
-      bytes = write(fd, buf, size_1);
-      // deallocate
-      free(buf);
-    }
-    assert(offset == bytes);
-    std::cout << __FUNCTION__ << ":: Bytes: " << bytes << " Timetaken: " << complete_serialization_time << std::endl;
-    */
+    /*
+size_t offset = 0;
+size_t bytes = 0;
+char *buf = nullptr;
+Helper::time_unit_t complete_serialization_time;
+{
+Helper::Timer<Helper::microsecond_t> _(complete_serialization_time);
+// Allocate buffer
+buf = Helper::Allocator::alloc<char>();
+// serialize
+memcpy(buf + offset, mem_1, size_1);
+offset += size_1;
+bytes = write(fd, buf, size_1);
+// deallocate
+free(buf);
+}
+assert(offset == bytes);
+std::cout << __FUNCTION__ << ":: Bytes: " << bytes << " Timetaken: " <<
+complete_serialization_time << std::endl;
+*/
   }
 } msg_t;
 
@@ -91,7 +92,9 @@ typedef struct msg_1_t {
       free(buf);
     }
     assert(offset == bytes);
-    std::cout << "write:: " << "Bytes: " << bytes << " Timetaken: " << complete_serialization_time << std::endl;
+    std::cout << "write:: "
+              << "Bytes: " << bytes
+              << " Timetaken: " << complete_serialization_time << std::endl;
   }
 
   void SerializeAndWritev(int fd) {
@@ -108,7 +111,9 @@ typedef struct msg_1_t {
       bytes = writev(fd, iov, iov_len);
     }
     assert(offset == bytes);
-    std::cout << "writev:: " << "Bytes: " << bytes << " Timetaken: " << complete_serialization_time << std::endl;
+    std::cout << "writev:: "
+              << "Bytes: " << bytes
+              << " Timetaken: " << complete_serialization_time << std::endl;
   }
 } msg_1_t;
 
@@ -138,10 +143,10 @@ void Benchmark_type_1(size_t size) {
 }
 // benchmark standard write system call
 void Benchmark_write(size_t size) {
-	for(size_t i=0; i<ROUNDS; i++) {
-	Benchmark_type_1(size);
-	sleep(1);
-	}
+  for (size_t i = 0; i < ROUNDS; i++) {
+    Benchmark_type_1(size);
+    sleep(1);
+  }
 }
 
 void Benchmark_for_size(size_t size) { Benchmark_write(size); }
@@ -151,11 +156,14 @@ void Benchmark(char *device, char *server, port_t p) {
   server_addr = server;
   port = p;
   for (size_t i = 0; i < MESSAGE_SIZES_LEN; i++) {
-	  std::cout << "===============SIZE: " << MESSAGE_SIZES[i] << "===============" << std::endl;
+    std::cout << "===============SIZE: " << MESSAGE_SIZES[i]
+              << "===============" << std::endl;
     Benchmark_for_size(MESSAGE_SIZES[i]);
-    //break;
+    // break;
     sleep(2);
-	  std::cout << "==============================================================" << std::endl;
+    std::cout
+        << "=============================================================="
+        << std::endl;
   }
 }
 

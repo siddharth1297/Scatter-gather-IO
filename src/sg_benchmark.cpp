@@ -17,7 +17,6 @@
 #include <sys/uio.h>
 #include <unistd.h>
 
-
 int server_fd = -1;
 int is_running = 0;
 struct sockaddr_in server_address;
@@ -28,7 +27,7 @@ size_t Receive(int fd, char *buf, size_t max_size) {
   size_t offset = 0, remaining_size = max_size;
   while (remaining_size) {
     ssize_t bytes = read(fd, buf + offset, remaining_size);
-    //printf("ChunkRead:: Size: %ld Buf: \"%s\"\n", bytes, buf + offset);
+    // printf("ChunkRead:: Size: %ld Buf: \"%s\"\n", bytes, buf + offset);
 
     if (bytes > 0) {
       assert(bytes <= remaining_size);
@@ -44,7 +43,7 @@ size_t Receive(int fd, char *buf, size_t max_size) {
       break;
     }
   }
-  //printf("TotalRead:: Size: %ld Buf: \"%s\"\n", offset, buf);
+  // printf("TotalRead:: Size: %ld Buf: \"%s\"\n", offset, buf);
   printf("TotalRead:: Size: %ld\n", offset);
   return offset;
 }
@@ -76,8 +75,8 @@ void Client(char *interface, char *server_addr) {
 int main(int argc, char *argv[]) {
   int option;
   int is_server = 0;
-  char *server_addr;
-  char *interface;
+  char *server_addr = nullptr;
+  char *interface = nullptr;
   while ((option = getopt(argc, argv, "sc:i:h")) != -1) {
     switch (option) {
     case 's':
@@ -104,7 +103,7 @@ int main(int argc, char *argv[]) {
   if (is_server) {
     Server(interface);
   } else {
-    assert(strlen(server_addr) > 0);
+    assert(server_addr && strlen(server_addr) > 0);
     // Client(interface, server_addr);
     Benchmark(interface, server_addr, PORT);
   }

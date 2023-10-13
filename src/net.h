@@ -30,7 +30,7 @@ int CreateTCPServer(char *interface, const port_t port, int backlog) {
     exit(EXIT_FAILURE);
   }
 
-  if (strlen(interface) > 0 &&
+  if (interface && strlen(interface) > 0 &&
       (setsockopt(server_fd, SOL_SOCKET, SO_BINDTODEVICE, interface,
                   strlen(interface)) == -1)) {
     perror("setsockopt: SO_BINDTODEVICE\n");
@@ -77,7 +77,7 @@ int TCPClient(char *interface, char *addr, port_t port) {
     perror("Socket\n");
     exit(EXIT_FAILURE);
   }
-  if (strlen(interface) > 0 &&
+  if (interface && strlen(interface) > 0 &&
       (setsockopt(client_fd, SOL_SOCKET, SO_BINDTODEVICE, interface,
                   strlen(interface)) == -1)) {
     perror("setsockopt: SO_BINDTODEVICE\n");
